@@ -144,22 +144,18 @@ function App() {
             }
 
             // up key pressed
-            if (this.pressedKey === 38) {
-                if (this.selectedSuggestionIdx > 0) {
-                    this.selectedSuggestionIdx -= 1;
-                    setSuggestionItems();
-                }
+            if (this.pressedKey === 38 && this.selectedSuggestionIdx > 0) {
+                this.selectedSuggestionIdx -= 1;
+                setSuggestionItems();
             }
 
             // down key pressed
-            if (this.pressedKey === 40) {
-                if (
-                    this.selectedSuggestionIdx <
-                    this.suggestionKeywords.length - 1
-                ) {
-                    this.selectedSuggestionIdx += 1;
-                    setSuggestionItems();
-                }
+            if (
+                this.pressedKey === 40 &&
+                this.selectedSuggestionIdx < this.suggestionKeywords.length - 1
+            ) {
+                this.selectedSuggestionIdx += 1;
+                setSuggestionItems();
             }
 
             // enter key pressed
