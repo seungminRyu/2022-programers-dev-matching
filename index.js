@@ -21,12 +21,9 @@ function App() {
     this.$searchInput = document.querySelector(".SearchInput__input");
     this.$selectedLang = document.querySelector(".SelectedLanguage");
     this.$selectedLangList = this.$selectedLang.querySelector("ul");
-    this.__selectedKeywords = [];
-    // this.selectedKeywords = [];
-    this.__lastInputQuery = "";
-    // this.lastInputQuery
-    this.__suggestionKeywords = [];
-    // this.suggestionKeywords = [];
+    this.selectedKeywords = [];
+    this.lastInputQuery = "";
+    this.suggestionKeywords = [];
     this.selectedSuggestionIdx = 0;
     this.isSuggestionActive = false;
     this.pressedKey = null;
@@ -47,7 +44,7 @@ function App() {
     };
 
     const setSuggestionItems = () => {
-        const html = this.__suggestionKeywords
+        const html = this.suggestionKeywords
             .map((item, i) => {
                 markMatchingText();
                 return `<li ${
@@ -71,7 +68,7 @@ function App() {
         }
 
         if (!inputText) {
-            this.__suggestionKeywords = [];
+            this.suggestionKeywords = [];
             hideSuggestion();
             return;
         }
@@ -87,7 +84,7 @@ function App() {
             });
 
         this.selectedSuggestionIdx = 0;
-        this.__suggestionKeywords = res;
+        this.suggestionKeywords = res;
         localStorage.setItem("last_input_qeury", inputText);
         setSuggestionItems();
         showSuggestion();
@@ -100,7 +97,7 @@ function App() {
     };
 
     const setSelectedLangItems = () => {
-        const html = this.__selectedKeywords
+        const html = this.selectedKeywords
             .map((item) => `<li>${item}</li>`)
             .join("");
 
@@ -108,13 +105,13 @@ function App() {
     };
 
     const setLastInputQeury = () => {
-        this.$searchInput.value = this.__lastInputQuery;
+        this.$searchInput.value = this.lastInputQuery;
     };
 
     const saveSelectedLangItems = () => {
         const targetKeyword =
-            this.__suggestionKeywords[this.selectedSuggestionIdx];
-        let nextSelectedKeywords = this.__selectedKeywords.filter(
+            this.suggestionKeywords[this.selectedSuggestionIdx];
+        let nextSelectedKeywords = this.selectedKeywords.filter(
             (el) => el !== targetKeyword
         );
         nextSelectedKeywords.push(targetKeyword);
@@ -124,7 +121,7 @@ function App() {
             nextSelectedKeywords = nextSelectedKeywords.slice(1);
         }
 
-        this.__selectedKeywords = nextSelectedKeywords;
+        this.selectedKeywords = nextSelectedKeywords;
         localStorage.setItem(
             "selected_keywords",
             JSON.stringify(nextSelectedKeywords)
@@ -158,7 +155,7 @@ function App() {
             if (this.pressedKey === 40) {
                 if (
                     this.selectedSuggestionIdx <
-                    this.__suggestionKeywords.length - 1
+                    this.suggestionKeywords.length - 1
                 ) {
                     this.selectedSuggestionIdx += 1;
                     setSuggestionItems();
@@ -178,7 +175,7 @@ function App() {
         if (!targetElem) return;
 
         const targetKeyword = targetElem.innerText;
-        const targetIdx = this.__suggestionKeywords.findIndex(
+        const targetIdx = this.suggestionKeywords.findIndex(
             (el) => el === targetKeyword
         );
 
@@ -196,19 +193,19 @@ function App() {
         const storageKeywords = localStorage.getItem("selected_keywords");
         if (!storageKeywords) {
             localStorage.setItem("selected_keywords", JSON.stringify([]));
-            this.__selectedKeywords = [];
+            this.selectedKeywords = [];
         } else {
             const selectedKeywords = JSON.parse(storageKeywords);
-            this.__selectedKeywords = selectedKeywords;
+            this.selectedKeywords = selectedKeywords;
         }
 
         //  get last input query
         const storageQeury = localStorage.getItem("last_input_qeury");
         if (!storageQeury) {
             localStorage.setItem("last_input_qeury", "");
-            this.__lastInputQuery = "";
+            this.lastInputQuery = "";
         } else {
-            this.__lastInputQuery = storageQeury;
+            this.lastInputQuery = storageQeury;
         }
     };
 
